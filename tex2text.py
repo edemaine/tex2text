@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import optparse, os, re, sys
 
 def tex2text(x, options):
@@ -28,13 +29,16 @@ def tex2text(x, options):
     x = re.sub(r'{\\bf\s+([^{}]*)}', r'**\1**', x)
     x = re.sub(r'\\(?:emph|textit)\s+{([^{}]*)}', r'*\1*', x)
     x = re.sub(r'\\(?:texttt|ttt)\s+{([^{}]*)}', r'`\1`', x)
-    x = re.sub(r'---', r'&mdash;', x)
     x = re.sub(r'~', r'&nbsp;', x)
-    x = re.sub(r'``', r'&ldquo;', x)
-    x = re.sub(r"''", r'&rdquo;', x)
-    x = re.sub(r'`', r'&lsquo;', x)
-    x = re.sub(r"'", r'&rsquo;', x)
+  if options.unicode:
+    x = re.sub(r'---', r'—', x)
+    x = re.sub(r'~', r' ', x)
+    x = re.sub(r'``', r'“', x)
+    x = re.sub(r"''", r'”', x)
+    x = re.sub(r'`', r'‘', x)
+    x = re.sub(r"'", r'’', x)
   else:
+    x = re.sub(r'~', r' ', x)
     def dash(match):
       if len(match.group(0)) == 3:
         return '--'
@@ -45,20 +49,27 @@ def tex2text(x, options):
     x = re.sub(r'\$\$?|\\[]()[]', options.math, x)
   else:
     x = re.sub(r'(\\left|\\right)\s*', '', x)
-    x = re.sub(r'\\infty\s*', r'infinity', x)
-    x = re.sub(r'\s*\\times\s*', r' x ', x)
-    x = re.sub(r'\\[cl]?dots\s*', r'...', x)
-    x = re.sub(r'\s*\\leq?\s+', r' <= ', x)
-    x = re.sub(r'\s*\\geq?\s+', r' >= ', x)
-    x = re.sub(r'\s*\\neq?\s+', r' != ', x)
-    x = re.sub(r'\$\\leq?\$', r'<=', x)
-    x = re.sub(r'\$\\geq?\$', r'>=', x)
-    x = re.sub(r'\$\\neq?\$', r'!=', x)
-    x = re.sub(r'\\ell', r'l', x)
-    x = re.sub(r'~|\\,', r' ', x)
+    if options.unicode:
+      x = re.sub(r'\\infty\s*', r'∞', x)
+      x = re.sub(r'\s*\\times\s*', r' × ', x)
+      x = re.sub(r'\\l?dots\s*', r'…', x)
+      x = re.sub(r'\\cdots\s*', r'⋯', x)
+      x = re.sub(r'\s*\\leq?\b\s*', r' ≤ ', x)
+      x = re.sub(r'\s*\\geq?\b\s*', r' ≥ ', x)
+      x = re.sub(r'\s*\\neq?\b\s*', r' ≠ ', x)
+      x = re.sub(r'\\ell', r'ℓ', x)
+    else:
+      x = re.sub(r'\\infty\s*', r'infinity', x)
+      x = re.sub(r'\s*\\times\s*', r' x ', x)
+      x = re.sub(r'\\[cl]?dots\s*', r'...', x)
+      x = re.sub(r'\s*\\leq?\b\s*', r' <= ', x)
+      x = re.sub(r'\s*\\geq?\b\s*', r' >= ', x)
+      x = re.sub(r'\s*\\neq?\b\s*', r' != ', x)
+      x = re.sub(r'\\ell', r'l', x)
     x = re.sub(r'\\tilde\s+([^{}])', r'\1~', x)
     x = re.sub(r'[$\\]', r'', x)
   x = re.sub(r"``|''", r'"', x)
+  x = re.sub(r"  +", r' ', x)
   return x
 
 def extract_abstract(x):
@@ -96,19 +107,24 @@ optparser.add_option('-a', '--abstract',
   help = 'search for LaTeX abstract and just convert that')
 optparser.add_option('-d', '--markdown',
   action = 'store_true', dest = 'markdown', default = False,
-  help = 'enable Markdown formatting')
+  help = 'enable Markdown formatting (implies -u)')
+optparser.add_option('-u', '--unicode',
+  action = 'store_true', dest = 'unicode', default = False,
+  help = 'enable Unicode characters (beyond ASCII)')
 optparser.add_option('-m', '--math',
   action = 'store', dest = 'math', default = None, metavar = '$',
   help = 'preserve LaTeX math with specified delimeter e.g. $')
 optparser.add_option('-g', '--gradescope',
   action = 'store_true', dest = 'gradescope', default = False,
-  help = 'Gradescope mode: -d -m $$')
+  help = 'Gradescope mode, equivalent to -d -m $$')
 
 def main():
   options, filenames = optparser.parse_args()
   if options.gradescope:
     options.markdown = True
     options.math = '$$'
+  if options.markdown:
+    options.unicode = True
   if filenames:
     for filename in filenames:
       print('--- %s' % filename)
