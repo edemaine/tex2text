@@ -111,15 +111,15 @@ def main():
     options.math = '$$'
   if filenames:
     for filename in filenames:
-      print '---', filename
-      print tex2text_file(filename, options)
+      print('--- %s' % filename)
+      print(tex2text_file(filename, options))
   else:
     tty = os.isatty(sys.stdin.fileno())
-    if tty: print '[reading text from stdin; specify --help for help]'
+    if tty: print('[reading text from stdin; specify --help for help]')
     x = sys.stdin.read()
     if options.abstract:
       x = extract_abstract(x)
-    if tty: print '----------------------'
-    print tex2text(x, options)
+    if tty: print('----------------------')
+    print(tex2text(x, options))
 
 if __name__ == '__main__': main()
