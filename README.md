@@ -10,8 +10,9 @@ But it has nonetheless served me well for two purposes:
 
 1. Converting a paper's abstract into text for uploading to a submission server
    (see `-a` option).
-2. Converting an exam into Markdown for e.g. Gradescope's online assignments
-   (see `-q` option).
+2. Converting an exam into Markdown for e.g.
+   [Gradescope's online assignments](https://help.gradescope.com/article/gm5cmcz19k-instructor-assignment-online)
+   (see `-g` option).
 
 ## Usage
 
