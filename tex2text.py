@@ -2,7 +2,24 @@
 # -*- coding: utf-8 -*-
 import optparse, os, re, sys
 
+def tex2text_sections(x, options):
+  options.sections = False  # for recursive calls
+  def texorpdfstring(m):
+    return '\\texorpdfstring{' + m.group(1) + m.group(2) + m.group(3) + '}{' + \
+      tex2text(m.group(2), options) + '}'
+  def replace_maths(m):
+    arg = m.group(2)
+    arg = re.sub(r'(\$\$?)([^$]+)(\$\$?)', texorpdfstring, arg, re.DOTALL)
+    arg = re.sub(r'(\\\()(.*?)(\\\))', texorpdfstring, arg, re.DOTALL)
+    arg = re.sub(r'(\\\[)(.*?)(\\\])', texorpdfstring, arg, re.DOTALL)
+    return m.group(1) + arg + '}'
+  return re.sub(
+    r'(\\(?:chapter|(?:sub)*section)\s*\{)((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}',
+    replace_maths, x)
+
 def tex2text(x, options):
+  if options.sections: return tex2text_sections(x, options)
+
   if not hasattr(options, 'bibcite'): options.bibcite = {}
   x = re.sub(r'\n%.*', r'', x)
   x = re.sub(r'%.*', r'', x)
@@ -125,6 +142,9 @@ optparser.add_option('-m', '--math',
 optparser.add_option('-g', '--gradescope',
   action = 'store_true', dest = 'gradescope', default = False,
   help = 'Gradescope mode, equivalent to -d -m $$')
+optparser.add_option('-s', '--sections',
+  action = 'store_true', dest = 'sections', default = False,
+  help = 'section mode: add \\texorpdfstring to headings (implies -u)')
 
 def main():
   options, filenames = optparser.parse_args()
@@ -133,9 +153,11 @@ def main():
     options.math = '$$'
   if options.markdown:
     options.unicode = True
+  if options.sections:
+    options.unicode = True
   if filenames:
     for filename in filenames:
-      print('--- %s' % filename)
+      print('%%%%%% %s' % filename)
       print(tex2text_file(filename, options))
   else:
     tty = os.isatty(sys.stdin.fileno())
