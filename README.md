@@ -13,11 +13,14 @@ But it has nonetheless served me well for two purposes:
 2. Converting an exam into Markdown for e.g.
    [Gradescope's online assignments](https://help.gradescope.com/article/gm5cmcz19k-instructor-assignment-online)
    (see `-g` option).
+3. Adding `\texorpdfstring`s to math in section/chapter headings
+   (see `-s` option).
 
 ## Usage
 
 tex2text is a command-line tool.  You need Python (2 or 3) installed.
 Then you can run it as follows:
+
 ```
 python tex2text.py [options] filename.tex
 ```
@@ -29,6 +32,7 @@ Available options:
   -a, --abstract    search for LaTeX abstract and just convert that
   -d, --markdown    enable Markdown formatting (implies -u)
   -u, --unicode     enable Unicode characters (beyond ASCII)
-  -m $, --math=$    preserve LaTeX math with specified delimeter e.g. $
+  -m $, --math=$    preserve LaTeX math with specified delimiter e.g. $
   -g, --gradescope  Gradescope mode, equivalent to -d -m $$
+  -s, --sections    section mode: add \texorpdfstring to headings (implies -u)
 ```

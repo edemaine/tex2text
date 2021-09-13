@@ -138,7 +138,7 @@ optparser.add_option('-u', '--unicode',
   help = 'enable Unicode characters (beyond ASCII)')
 optparser.add_option('-m', '--math',
   action = 'store', dest = 'math', default = None, metavar = '$',
-  help = 'preserve LaTeX math with specified delimeter e.g. $')
+  help = 'preserve LaTeX math with specified delimiter e.g. $')
 optparser.add_option('-g', '--gradescope',
   action = 'store_true', dest = 'gradescope', default = False,
   help = 'Gradescope mode, equivalent to -d -m $$')
