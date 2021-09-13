@@ -60,6 +60,9 @@ def tex2text(x, options):
       x = re.sub(r'\^\\circ\s*|^\\circ\s*|\\degree\s*', r'°', x)
       x = re.sub(r'\\ell\s*', r'ℓ', x)
       x = re.sub(r'\\epsilon\s*', r'ε', x)
+      x = re.sub(r'\\mathbb\s*{C}', r'ℂ', x)
+      x = re.sub(r'\\mathbb\s*{Q}', r'ℚ', x)
+      x = re.sub(r'\\mathbb\s*{R}', r'ℝ', x)
     else:
       x = re.sub(r'\\infty\s*', r'infinity', x)
       x = re.sub(r'\s*\\times\s*', r' x ', x)
@@ -69,6 +72,7 @@ def tex2text(x, options):
       x = re.sub(r'\s*\\neq?\b\s*', r' != ', x)
       x = re.sub(r'\^\\circ\s*|^\\circ\s*|\\degrees\s*', r' degrees', x)
       x = re.sub(r'\\ell\s*', r'l', x)
+      x = re.sub(r'\\mathbb\s*{([A-Z])}', r'\1', x)
     x = re.sub(r'\s*\\over\s*', r' / ', x)
     x = re.sub(r'\\tilde\s+([^{}])', r'\1~', x)
     x = re.sub(r'[$\\]', r'', x)
