@@ -49,6 +49,7 @@ def tex2text(x, options):
     x = re.sub(r'~', r'&nbsp;', x)
   if options.unicode:
     x = re.sub(r'---', r'—', x)
+    x = re.sub(r'--', r'–', x)
     x = re.sub(r'~', r' ', x)
     x = re.sub(r'``', r'“', x)
     x = re.sub(r"''", r'”', x)
