@@ -119,8 +119,11 @@ def tex2text_file(filename, options):
     f = open(os.path.splitext(filename)[0] + '.aux', 'r')
     aux = f.read()
     f.close()
-    for match in re.finditer(r'\\bibcite\{([^{}]*)\}\{([^{}]*)\}', aux):
-      bibcite[match.group(1)] = match.group(2)
+    for match in re.finditer(r'\\bibcite\{([^{}]*)\}\{((?:[^{}]|\{\$\^\{[^{}]*\}\$\})*)\}', aux):
+      cite = match.group(2)
+      # alpha's et al. character
+      cite = re.sub(r'\{\$\^\{([^{}]*)\}\$\}', r'\1', cite)
+      bibcite[match.group(1)] = cite
   except IOError:
     pass
   options.bibcite = bibcite
