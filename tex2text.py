@@ -78,6 +78,7 @@ def tex2text(x, options):
       x = re.sub(r'\^\\circ\s*|^\\circ\s*|\\degree\s*', r'°', x)
       x = re.sub(r'\\ell\s*', r'ℓ', x)
       x = re.sub(r'\\epsilon\s*', r'ε', x)
+      x = re.sub(r'\\Lambda\s*', r'Λ', x)
       x = re.sub(r'\\mathbb\s*{C}', r'ℂ', x)
       x = re.sub(r'\\mathbb\s*{Q}', r'ℚ', x)
       x = re.sub(r'\\mathbb\s*{R}', r'ℝ', x)
