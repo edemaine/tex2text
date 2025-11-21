@@ -23,7 +23,7 @@ def tex2text(x, options):
   if not hasattr(options, 'bibcite'): options.bibcite = {}
   x = re.sub(r'\n%.*', r'', x)
   x = re.sub(r'%.*', r'', x)
-  x = re.sub(r'^\s+', r'', x, flags=re.MULTILINE)
+  x = re.sub(r'^[ \t]+', r'', x, flags=re.MULTILINE)
   x = re.sub(r'\n\n+', r'<P>', x)
   x = re.sub(r'\s+', r' ', x)
   x = re.sub(r'<P>', r'\n\n', x)
