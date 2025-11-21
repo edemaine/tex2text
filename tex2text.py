@@ -24,6 +24,7 @@ def tex2text(x, options):
   x = re.sub(r'\n%.*', r'', x)
   x = re.sub(r'%.*', r'', x)
   x = re.sub(r'^[ \t]+', r'', x, flags=re.MULTILINE)
+  x = re.sub(r'\\if(full|false)\s*(.*?)\\fi', '', x, flags=re.DOTALL)
   x = re.sub(r'\n\n+', r'<P>', x)
   x = re.sub(r'\s+', r' ', x)
   x = re.sub(r'<P>', r'\n\n', x)
@@ -39,7 +40,6 @@ def tex2text(x, options):
   x = re.sub(r'\\(begin|end){(normal)?(itemize|enumerate|description|center)}\s*', '\n', x)
   x = re.sub(r'\\noindent\s*', '', x)
   x = re.sub(r'\\vspace\s*\*?\s*{[^{}]*}', '', x)
-  x = re.sub(r'\\if(full|false)\s*(.*?)\\fi', '', x, flags=re.DOTALL)
   x = re.sub(r'\\footnote\s*{(.*?)}', r'[\1]', x, flags=re.DOTALL)
   if options.markdown:
     x = re.sub(r'\\textbf\s*{([^{}]*)}', r'**\1**', x)
